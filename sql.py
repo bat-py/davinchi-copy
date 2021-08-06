@@ -9,7 +9,7 @@ class SqlRequests:
             password='crow999',
             db='telegrambot',
             charset='utf8mb4',
-#            cursorclass=DictCursor
+            cursorclass=DictCursor
             )
             
         self.cur = self.con.cursor()
@@ -44,5 +44,20 @@ class SqlRequests:
         if avatar:
             self.cur.execute("UPDATE members SET =%s WHERE id = %s", (avatar, id))
             self.con.commit()
+
+    def get_bot_messages(self, message, lang=None):
+        self.cur.execute("SELECT ru, eng, uk FROM bot_messages WHERE message = %s", (message,))
+
+        if lang:
+            return self.cur.fetchone()[lang]
+        else:
+            return self.cur.fetchone()
+
+    def check_member_exist (self, id):
+        self.cur.execute("SELECT id FROM members WHERE id=%s", (id, ))
+        if self.cur.fetchone():
+            return True
+        else:
+            return False
 
 

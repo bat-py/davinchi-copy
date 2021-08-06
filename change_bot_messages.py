@@ -20,7 +20,7 @@ class SqlRequests:
                "We remember you! Do you want to talk to someone new again",
                "Ми тебе пам\'ятаємо! Хочеш знову поспілкуватися з кимось новим")
 
-        as3 = ("langs",  ':flag-ru: Начать', ':flag-us: Start', ':flag-ua: Почати')
+        as3 = ("langs",  '🇷🇺 Начать', '🇺🇸 Start', '🇺🇦 Почати')
 
         as4 = ("age", 'Сколько тебе лет?', 'How old are you?', "Скільки тобі років?")
 
@@ -52,12 +52,12 @@ class SqlRequests:
         as17 = ("accept", "Все верно?", "Is that right?", "Все вірно?")
         as18 = ("yes_button", "Да", "Yes", "Да")
         as19 = ("edit_profile_button", "Изменить анкету", "Edit the questionnaire", "Змінити анкету")
-        #self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as19)
-        #self.con.commit()
+        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as3)
+        self.con.commit()
 
     def b(self):
         self.cur.execute(f"select uk from bot_messages;")
         print(self.cur.fetchall())
 s = SqlRequests()
-s.b()
+s.a()
 
