@@ -19,6 +19,10 @@ class SqlRequests:
         self.cur.execute("INSERT INTO members(id, lang) VALUES (%s, %s)", (id, lang))
         self.con.commit()
 
+    def get_lang(self, id):
+        self.cur.execute("SELECT lang FROM members WHERE id = %s", (id, ))
+        return self.cur.fetchone('lang')
+
     def update_members(self, id, lang=None, name=None, age=None, gender=None, interesting=None, city=None, about=None, avatar=None):
         if lang:
             self.cur.execute("UPDATE members SET lang=%s WHERE id = %s", (lang, id))
@@ -47,7 +51,6 @@ class SqlRequests:
 
     def get_bot_messages(self, message, lang=None):
         self.cur.execute("SELECT ru, eng, uk FROM bot_messages WHERE message = %s", (message,))
-
         if lang:
             return self.cur.fetchone()[lang]
         else:
