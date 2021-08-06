@@ -52,7 +52,14 @@ class SqlRequests:
         as17 = ("accept", "Все верно?", "Is that right?", "Все вірно?")
         as18 = ("yes_button", "Да", "Yes", "Да")
         as19 = ("edit_profile_button", "Изменить анкету", "Edit the questionnaire", "Змінити анкету")
-        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as3)
+        as19 = ("wrong_age", "Укажи правильный возраст, только цифры", "Specify the correct age, only numbers", "Вкажи правильний вік, тільки цифри")
+
+        as20 = ("man", "Парень", "Guy" , "Хлопець")
+        as21 = ("girl", "Девушка","Girl", "Дівчина" )
+        as22 = ("wrong_gender", "Нет такого варианта ответа", "There is no such answer option", "Немає такого варіанту відповіді")
+        as23 = ("wrong_interested", "Нет такого варианта ответа", "There is no such answer option", "Немає такого варіанту відповіді")
+
+        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as23)
         self.con.commit()
 
     def b(self):
