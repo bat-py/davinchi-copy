@@ -61,7 +61,7 @@ class SqlRequests:
         self.cur.execute("DELETE FROM members WHERE id LIKE %s", (id, ))
         self.con.commit()
 
-    def get_member_info(self, id, name=None, age=None, gender=None, interested=None, city=None, about=None, avatar=None, avatar_type=None):
+    def get_member_info(self, id, name=None, age=None, gender=None, interested=None, city=None, about=None, avatar=None, avatar_type=None, likes=None, dislikes=None):
         info = {}
         if name:
             self.cur.execute("SELECT name FROM members WHERE id = %s", (id, ))
@@ -87,6 +87,14 @@ class SqlRequests:
         if avatar_type:
             self.cur.execute("SELECT avatar_type FROM members WHERE id = %s", (id,))
             info['avatar_type'] = self.cur.fetchone()['avatar_type']
+        if likes:
+            self.cur.execute("SELECT likes FROM members WHERE id = %s", (id, ))
+            info['likes'] = self.cur.fetchone()['likes']
+        if dislikes:
+            self.cur.execute("SELECT dislikes FROM members WHERE id = %s", (id,))
+            info['dislikes'] = self.cur.fetchone()['dislikes']
+
+
         return info
 
 # Returns True if in table members exists id
@@ -112,31 +120,18 @@ class SqlRequests:
 
 
 
-    def random_profile_select(self, interested, city=None):
-<<<<<<< HEAD
+    def random_profile_select(self, chat_id, interested, city=None):
         while True:
             self.cur.execute("SELECT * FROM members WHERE interested = %s", (interested, ))
             profile_list = self.cur.fetchall()
             if not profile_list:
                 self.cur.execute("SELECT * FROM members")
                 profile_list = self.cur.fetchall()
-
             member = random.choice(profile_list)
-            if not member['avatar'] and not member['age'] and member['name'] and not member['city']:
+            if member['avatar'] and member['age'] and member['name'] and member['city'] and member['id'] != chat_id:
                 return member
-            else:
+                
 
-=======
-        self.cur.execute("SELECT * FROM members WHERE interested = %s", (interested, ))
-        profile_list = self.cur.fetchall()
-        if not profile_lists:
-            self.cur.execute("SELECT * FROM members")
-            profile_list = self.cur.fetchall()
-
-        member = random.choice(profile_list)
-        print(member)
-        return member
->>>>>>> 24bfd457670257cf4f376f8e68b36a20c9155b91
 
     
 

@@ -285,15 +285,9 @@ def main():
 
     def random_profile_sender(chat_id):
         lang = data.get_lang(chat_id)
-<<<<<<< HEAD
         interested = data.get_member_info(chat_id, interested=True)['interested']
-        member = data.random_profile_select(interested)
+        member = data.random_profile_select(chat_id, interested)
 
-=======
-        interested = data.get_member_info(chat_id, interested=True)
-        member = data.random_profile_select(interested)
-        print('asdsad')
->>>>>>> 24bfd457670257cf4f376f8e68b36a20c9155b91
         member_profile = f"{member['name']}, {member['age']}, {member['city']}\n{member['about']}"
 
         like_emoji = data.get_bot_messages('like_emoji', lang=lang)
@@ -302,11 +296,7 @@ def main():
         zzz = data.get_bot_messages('zzz', lang=lang)
         four_buttons = reply_keyboard_creator([[like_emoji, send_message_emoji, dislike, zzz]], one_time_keyboard=True)
         
-<<<<<<< HEAD
         if member['avatar_type'] == 'photo':
-=======
-        if member_for_send['avatar_type'] == 'photo':
->>>>>>> 24bfd457670257cf4f376f8e68b36a20c9155b91
             msg = bot.send_photo(chat_id, member['avatar'], caption=member_profile, reply_markup=four_buttons)
         else:
             msg = bot.send_video(chat_id, member['avatar'], caption=member_profile, reply_markup=four_buttons)
@@ -314,7 +304,7 @@ def main():
         bot.register_next_step_handler(msg, press_four_buttons)
 
     def press_four_buttons(message):
-       pass 
+       
 
         
 
