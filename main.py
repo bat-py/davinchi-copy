@@ -22,17 +22,17 @@ def reply_keyboard_creator(all_buttons, one_time_keyboard: bool = None):
 def main():
     @bot.message_handler(commands=['start'])
     def start_command(message):
-        if not data.check_member_exist(message.chat.id):
-            welcome_message = data.get_bot_messages('after_start_new', 'eng')
+#        if data.check_member_exist(message.chat.id):
+#            data.del_member(message.chat.id)
+#        else:
+        welcome_message = data.get_bot_messages('after_start_new', 'eng')
 
-            choose_lang_list = data.get_bot_messages(message='langs')
-            lang_list_for_create_button = [[i[1] for i in choose_lang_list.items()]]
-            buttons = reply_keyboard_creator(all_buttons=lang_list_for_create_button, one_time_keyboard=True)
+        choose_lang_list = data.get_bot_messages(message='langs')
+        lang_list_for_create_button = [[i[1] for i in choose_lang_list.items()]]
+        buttons = reply_keyboard_creator(all_buttons=lang_list_for_create_button, one_time_keyboard=True)
 
-            msg = bot.send_message(message.chat.id, welcome_message, reply_markup=buttons)
-            bot.register_next_step_handler(msg, askLang)
-        else:
-            pass
+        msg = bot.send_message(message.chat.id, welcome_message, reply_markup=buttons)
+        bot.register_next_step_handler(msg, askLang)
 
 
 # Works if members didn't choose one of the language button
@@ -60,8 +60,7 @@ def main():
             msg = bot.send_message(chat_id, warning_message, reply_markup=buttons)
             bot.register_next_step_handler(msg, askLang)
 
-#        members_name = message.chat.first_name
-#        name_button = reply_keyboard_creator([[members_name]], one_time_keyboard=True)
+
         msg = bot.send_message(message.chat.id, bot_message)
         bot.register_next_step_handler(msg, askAge)
 
@@ -116,12 +115,14 @@ def main():
 
         interested_list = [data.get_bot_messages('interested_button_man', lang=lang),
                            data.get_bot_messages('interested_button_girl', lang=lang),
-                           data.get_bot_messages('interested_button_girl', lang=lang)
+                           data.get_bot_messages('interested_button_all', lang=lang)
                            ]
-        if interested == data.get_bot_messages('interested_button_man', lang=lang) or\
-           interested == data.get_bot_messages('interested_button_girl', lang=lang) or\
-           interested == data.get_bot_messages('interested_button_all', lang=lang):
+        if interested in interested_list:
             data.update_member_info(message.chat.id, interested=interested)
+
+            which_city = data.get_bot_messages(message='which_city', lang=lang)
+            msg = bot.send_message(message.chat.id, which_city)
+            bot.register_next_step_handler(msg, askCity)
         else:
             wrong_interested = data.get_bot_messages('wrong_interested', lang=lang)
             interested_button_man = data.get_bot_messages('interested_button_man', lang=lang)
@@ -131,9 +132,7 @@ def main():
             msg = bot.send_message(message.chat.id, wrong_interested, reply_markup=interested_buttons)
             bot.register_next_step_handler(msg, askInterested)
 
-        which_city = data.get_bot_messages(message='which_city', lang=lang)
-        msg = bot.send_message(message.chat.id, which_city)
-        bot.register_next_step_handler(msg, askCity)
+
 
     def askCity(message):
         lang = data.get_lang(message.chat.id)
@@ -141,13 +140,92 @@ def main():
 
         if city:
             data.update_member_info(message.chat.id, city=city)
-
-
-
+            members_name = message.chat.first_name
+            name_button = reply_keyboard_creator([[members_name]], one_time_keyboard=False)
+            get_name_message = data.get_bot_messages('get_name', lang=lang)
+            msg = bot.send_message(message.chat.id, get_name_message, reply_markup=name_button)
+            bot.register_next_step_handler(msg, askName)
+        else:
+            which_city = data.get_bot_messages(message='which_city', lang=lang)
+            msg = bot.send_message(message.chat.id, which_city)
+            bot.register_next_step_handler(msg, askCity)
 
 
     # Ask member's name and creates button with member's name
     def askName(message):
+        lang = data.get_lang(message.chat.id)
+        name = message.text
+
+        if name:
+            data.update_member_info(message.chat.id, name=name)
+            about = data.get_bot_messages('about', lang=lang)
+            skip_button_text = data.get_bot_messages('skip_button', lang=lang)
+            skip_button = reply_keyboard_creator([[skip_button_text]], one_time_keyboard=True)
+            msg = bot.send_message(message.chat.id, about, reply_markup=skip_button)
+            bot.register_next_step_handler(msg, askAbout)
+        else:
+            get_name_message = data.get_bot_messages('get_name', lang=lang)
+            msg = bot.send_message(message.chat.id, get_name_message)
+            bot.register_next_step_handler(msg, askName)
+
+    def askAbout(message):
+        lang = data.get_lang(message.chat.id)
+        about = message.text
+
+        if about == data.get_bot_messages('skip_button', lang=lang):
+            pass
+        elif about:
+                data.update_member_info(message.chat.id, about=about)
+        else:
+            about = data.get_bot_messages('about', lang=lang)
+            skip_button_text = data.get_bot_messages('skip_button', lang=lang)
+            skip_button = reply_keyboard_creator([[skip_button_text]], one_time_keyboard=True)
+            msg = bot.send_message(message.chat.id, about, reply_markup=skip_button)
+            bot.register_next_step_handler(msg, askAbout)
+
+        get_photo_video = data.get_bot_messages('get_photo_video', lang=lang)
+        msg = bot.send_message(message.chat.id, get_photo_video)
+        bot.register_next_step_handler(msg, askAvatar)
+
+    def askAvatar(message):
+        lang = data.get_lang(message.chat.id)
+
+        if message.content_type == 'photo':
+            file_id = message.json['photo'][0]['file_id']
+            data.update_member_info(message.chat.id, avatar=file_id)
+            data.update_member_info(message.chat.id, avatar_type='photo')
+        elif message.content_type == 'video':
+            file_id = message.json['video']['thumb']['file_id']
+            data.update_member_info(message.chat.id, avatar=file_id)
+            data.update_member_info(message.chat.id, avatar_type='video')
+        else:
+            get_photo_video = data.get_bot_messages('get_photo_video', lang=lang)
+            msg = bot.send_message(message.chat.id, get_photo_video)
+            bot.register_next_step_handler(msg, askAvatar)
+
+        m = data.get_bot_messages('your_profile_looks_like', lang=lang)
+        bot.send_message(message.chat.id, m)
+
+        info = data.get_member_info(message.chat.id, name=True, age=True, city=True, about=True)
+        caption = f"{info['name']}, {info['age']}, {info['city']}\n{info['about']}"
+
+        photo_video_id = data.get_member_info(message.chat.id, avatar=True)['avatar']
+
+        if message.content_type == 'photo':
+            bot.send_photo(message.chat.id, photo_video_id, caption=caption)
+        elif message.content_type == 'video':
+            bot.send_video(message.chat.id, photo_video_id, caption=caption)
+
+
+        yes_button = data.get_bot_messages('yes_button', lang=lang)
+        edit_profile_button = data.get_bot_messages('edit_profile_button', lang=lang)
+        buttons = reply_keyboard_creator([[yes_button, edit_profile_button]], one_time_keyboard=True)
+        confirm_profile = data.get_bot_messages('confirm_profile', lang=lang)
+        msg = bot.send_message(message.chat.id, confirm_profile, reply_markup=buttons)
+
+        bot.register_next_step_handler(msg, askConfirm)
+
+    def askConfirm(message):
         pass
 
 

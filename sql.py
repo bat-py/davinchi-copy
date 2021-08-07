@@ -19,7 +19,7 @@ class SqlRequests:
         self.con.commit()
 
 # Insert or Update members info
-    def update_member_info(self, id, name=None, age=None, gender=None, interested=None, city=None, about=None, avatar=None):
+    def update_member_info(self, id, name=None, age=None, gender=None, interested=None, city=None, about=None, avatar=None, avatar_type=None):
         if name:
             self.cur.execute("UPDATE members SET name = %s WHERE id = %s", (name, id))
             self.con.commit()
@@ -32,8 +32,8 @@ class SqlRequests:
             self.cur.execute("UPDATE members SET gender = %s WHERE id = %s", (gender, id))
             self.con.commit()
 
-        if interesting:
-            self.cur.execute("UPDATE members SET interested = %s WHERE id = %s", (interested, id))
+        if interested:
+            self.cur.execute("UPDATE members SET interesting = %s WHERE id = %s", (interested, id))
             self.con.commit()
 
         if city:
@@ -48,9 +48,44 @@ class SqlRequests:
             self.cur.execute("UPDATE members SET avatar = %s WHERE id = %s", (avatar, id))
             self.con.commit()
 
-    def get_member_info(self, id, lang, name, age, gender, interesting, city, about, avatar):
-        pass
+        if avatar_type:
+            self.cur.execute("UPDATE members SET avatar_type = %s WHERE id = %s", (avatar_type, id))
+            self.con.commit()
 
+    def del_member(self, id):
+        self.cur.execute("DELETE FROM members WHERE id LIKE %s", (id, ))
+        self.con.commit()
+
+    def get_member_info(self, id, name=None, age=None, gender=None, interested=None, city=None, about=None, avatar=None, avatar_type=None):
+        info = {}
+        if name:
+            self.cur.execute("SELECT name FROM members WHERE id = %s", (id, ))
+            info['name'] = self.cur.fetchone()['name']
+        if age:
+            self.cur.execute("SELECT age FROM members WHERE id = %s", (id, ))
+            info['age'] = self.cur.fetchone()['age']
+        if gender:
+            self.cur.execute("SELECT gender FROM members WHERE id = %s", (id,))
+            info['gender'] = self.cur.fetchone()['gender']
+        if interested:
+            self.cur.execute("SELECT interesting FROM members WHERE id = %s", (id,))
+            info['interested'] = self.cur.fetchone()['interested']
+        if city:
+            self.cur.execute("SELECT city FROM members WHERE id = %s", (id,))
+            info['city'] = self.cur.fetchone()['city']
+        if about:
+            self.cur.execute("SELECT about FROM members WHERE id = %s", (id,))
+            info['about'] = self.cur.fetchone()['about']
+        if avatar:
+            self.cur.execute("SELECT avatar FROM members WHERE id = %s", (id,))
+            info['avatar'] = self.cur.fetchone()['avatar']
+        if avatar:
+            self.cur.execute("SELECT avatar FROM members WHERE id = %s", (id,))
+            info['avatar'] = self.cur.fetchone()['avatar']
+        if avatar_type:
+            self.cur.execute("SELECT avatar_type FROM members WHERE id = %s", (id,))
+            info['avatar_type'] = self.cur.fetchone()['avatar_type']
+        return info
 
 # Returns True if in table members exists id
     def check_member_exist (self, id):

@@ -58,8 +58,13 @@ class SqlRequests:
         as21 = ("girl", "Девушка","Girl", "Дівчина" )
         as22 = ("wrong_gender", "Нет такого варианта ответа", "There is no such answer option", "Немає такого варіанту відповіді")
         as23 = ("wrong_interested", "Нет такого варианта ответа", "There is no such answer option", "Немає такого варіанту відповіді")
+        as24 = ("your_profile_looks_like", "Так выглядит твоя анкета:", "This is what your profile looks like:", "Так виглядає твоя анкета:")
+        as244 = ("confirm_profile", "Все верно?", "Is that right?", "Все вірно?")
 
-        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as23)
+        as25 = ("send_message_to_another_member", "Напиши сообщение для этого пользователя")
+        as26 = ('warning_short_message', 'Придумай что-то поинтереснее, таким сообщением никого не удивишь ;)', )
+
+        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as25)
         self.con.commit()
 
     def b(self):
