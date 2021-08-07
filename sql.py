@@ -21,7 +21,7 @@ class SqlRequests:
 
 # Insert or Update members info
     def update_member_info(self, id, lang=None, name=None, age=None, gender=None, interested=None, city=None, about=None, avatar=None, avatar_type=None):
-        if name:
+        if lang:
             self.cur.execute("UPDATE members SET lang = %s WHERE id = %s", (lang, id))
             self.con.commit()
 
@@ -84,9 +84,6 @@ class SqlRequests:
         if avatar:
             self.cur.execute("SELECT avatar FROM members WHERE id = %s", (id,))
             info['avatar'] = self.cur.fetchone()['avatar']
-        if avatar:
-            self.cur.execute("SELECT avatar FROM members WHERE id = %s", (id,))
-            info['avatar'] = self.cur.fetchone()['avatar']
         if avatar_type:
             self.cur.execute("SELECT avatar_type FROM members WHERE id = %s", (id,))
             info['avatar_type'] = self.cur.fetchone()['avatar_type']
@@ -116,6 +113,20 @@ class SqlRequests:
 
 
     def random_profile_select(self, interested, city=None):
+<<<<<<< HEAD
+        while True:
+            self.cur.execute("SELECT * FROM members WHERE interested = %s", (interested, ))
+            profile_list = self.cur.fetchall()
+            if not profile_list:
+                self.cur.execute("SELECT * FROM members")
+                profile_list = self.cur.fetchall()
+
+            member = random.choice(profile_list)
+            if not member['avatar'] and not member['age'] and member['name'] and not member['city']:
+                return member
+            else:
+
+=======
         self.cur.execute("SELECT * FROM members WHERE interested = %s", (interested, ))
         profile_list = self.cur.fetchall()
         if not profile_lists:
@@ -125,6 +136,7 @@ class SqlRequests:
         member = random.choice(profile_list)
         print(member)
         return member
+>>>>>>> 24bfd457670257cf4f376f8e68b36a20c9155b91
 
     
 

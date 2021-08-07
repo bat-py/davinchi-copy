@@ -180,10 +180,10 @@ def main():
 
         if name:
             data.update_member_info(message.chat.id, name=name)
-            about = data.get_bot_messages('about', lang=lang)
+            abouts = data.get_bot_messages('about', lang=lang)
             skip_button_text = data.get_bot_messages('skip_button', lang=lang)
             skip_button = reply_keyboard_creator([[skip_button_text]], one_time_keyboard=True)
-            msg = bot.send_message(message.chat.id, about, reply_markup=skip_button)
+            msg = bot.send_message(message.chat.id, abouts, reply_markup=skip_button)
             bot.register_next_step_handler(msg, askAbout)
         else:
             members_name = message.chat.first_name
@@ -194,8 +194,8 @@ def main():
 
     def askAbout(message):
         lang = data.get_lang(message.chat.id)
-        about = message.text
 
+        about = message.text
         if about == data.get_bot_messages('skip_button', lang=lang):
             get_photo_video = data.get_bot_messages('get_photo_video', lang=lang)
             msg = bot.send_message(message.chat.id, get_photo_video)
@@ -285,9 +285,15 @@ def main():
 
     def random_profile_sender(chat_id):
         lang = data.get_lang(chat_id)
+<<<<<<< HEAD
+        interested = data.get_member_info(chat_id, interested=True)['interested']
+        member = data.random_profile_select(interested)
+
+=======
         interested = data.get_member_info(chat_id, interested=True)
         member = data.random_profile_select(interested)
         print('asdsad')
+>>>>>>> 24bfd457670257cf4f376f8e68b36a20c9155b91
         member_profile = f"{member['name']}, {member['age']}, {member['city']}\n{member['about']}"
 
         like_emoji = data.get_bot_messages('like_emoji', lang=lang)
@@ -296,7 +302,11 @@ def main():
         zzz = data.get_bot_messages('zzz', lang=lang)
         four_buttons = reply_keyboard_creator([[like_emoji, send_message_emoji, dislike, zzz]], one_time_keyboard=True)
         
+<<<<<<< HEAD
+        if member['avatar_type'] == 'photo':
+=======
         if member_for_send['avatar_type'] == 'photo':
+>>>>>>> 24bfd457670257cf4f376f8e68b36a20c9155b91
             msg = bot.send_photo(chat_id, member['avatar'], caption=member_profile, reply_markup=four_buttons)
         else:
             msg = bot.send_video(chat_id, member['avatar'], caption=member_profile, reply_markup=four_buttons)

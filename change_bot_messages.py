@@ -79,12 +79,9 @@ class SqlRequests:
         self.con.commit()
 
     def b(self):
-        self.cur.execute("SELECT * FROM members  where interested = 'mm'")
+        self.cur.execute("SELECT * FROM members WHERE interested = %s", ("interested_button_man", ))
         a = self.cur.fetchall()
-        if not a:
-            print(a, 'ass')
-        else:
-            print(a)
+        print(a)
 s = SqlRequests()
 s.b()
 
