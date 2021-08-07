@@ -1,5 +1,6 @@
 import pymysql
 from pymysql.cursors import DictCursor 
+import random
 
 class SqlRequests:
     def __init__(self):
@@ -114,7 +115,26 @@ class SqlRequests:
 
 
 
-    def random_profile_select(self, city, interested):
+    def random_profile_select(self, interested, city=None):
         self.cur.execute("SELECT * FROM members WHERE interested = %s", (interested, ))
-        profile_lists = self.cur.fetchall()
-        if not profile_lists
+        profile_list = self.cur.fetchall()
+        if not profile_lists:
+            self.cur.execute("SELECT * FROM members")
+            profile_list = self.cur.fetchall()
+
+        member = random.choice(profile_list)
+        print(member)
+        return member
+
+    
+
+
+
+
+
+
+
+
+
+
+

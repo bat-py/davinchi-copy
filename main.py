@@ -269,7 +269,7 @@ def main():
         lang = data.get_lang(message.chat.id)
 
         if message.text == data.get_bot_messages('yes_button', lang=lang):
-            random_profile_sender(message)
+            random_profile_sender(message.chat.id)
         elif message.text == data.get_bot_messages('edit_profile_button', lang=lang):
             bot_message = data.get_bot_messages('age', lang=lang)
             msg = bot.send_message(message.chat.id, bot_message)
@@ -283,7 +283,30 @@ def main():
             bot.register_next_step_handler(msg, askConfirm)
 
 
-    def random_profile_sender(message):
+    def random_profile_sender(chat_id):
+        lang = data.get_lang(chat_id)
+        interested = data.get_member_info(chat_id, interested=True)
+        member = data.random_profile_select(interested)
+        print('asdsad')
+        member_profile = f"{member['name']}, {member['age']}, {member['city']}\n{member['about']}"
+
+        like_emoji = data.get_bot_messages('like_emoji', lang=lang)
+        send_message_emoji = data.get_bot_messages('send_message_emoji', lang=lang)
+        dislike = data.get_bot_messages('dislike', lang=lang)
+        zzz = data.get_bot_messages('zzz', lang=lang)
+        four_buttons = reply_keyboard_creator([[like_emoji, send_message_emoji, dislike, zzz]], one_time_keyboard=True)
+        
+        if member_for_send['avatar_type'] == 'photo':
+            msg = bot.send_photo(chat_id, member['avatar'], caption=member_profile, reply_markup=four_buttons)
+        else:
+            msg = bot.send_video(chat_id, member['avatar'], caption=member_profile, reply_markup=four_buttons)
+
+        bot.register_next_step_handler(msg, press_four_buttons)
+
+    def press_four_buttons(message):
+       pass 
+
+        
 
 
     bot.polling()
