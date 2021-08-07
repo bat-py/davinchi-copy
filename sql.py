@@ -19,7 +19,11 @@ class SqlRequests:
         self.con.commit()
 
 # Insert or Update members info
-    def update_member_info(self, id, name=None, age=None, gender=None, interested=None, city=None, about=None, avatar=None, avatar_type=None):
+    def update_member_info(self, id, lang=None, name=None, age=None, gender=None, interested=None, city=None, about=None, avatar=None, avatar_type=None):
+        if name:
+            self.cur.execute("UPDATE members SET lang = %s WHERE id = %s", (lang, id))
+            self.con.commit()
+
         if name:
             self.cur.execute("UPDATE members SET name = %s WHERE id = %s", (name, id))
             self.con.commit()
@@ -33,7 +37,7 @@ class SqlRequests:
             self.con.commit()
 
         if interested:
-            self.cur.execute("UPDATE members SET interesting = %s WHERE id = %s", (interested, id))
+            self.cur.execute("UPDATE members SET interested = %s WHERE id = %s", (interested, id))
             self.con.commit()
 
         if city:
@@ -68,7 +72,7 @@ class SqlRequests:
             self.cur.execute("SELECT gender FROM members WHERE id = %s", (id,))
             info['gender'] = self.cur.fetchone()['gender']
         if interested:
-            self.cur.execute("SELECT interesting FROM members WHERE id = %s", (id,))
+            self.cur.execute("SELECT interested FROM members WHERE id = %s", (id,))
             info['interested'] = self.cur.fetchone()['interested']
         if city:
             self.cur.execute("SELECT city FROM members WHERE id = %s", (id,))
@@ -110,3 +114,7 @@ class SqlRequests:
 
 
 
+    def random_profile_select(self, city, interested):
+        self.cur.execute("SELECT * FROM members WHERE interested = %s", (interested, ))
+        profile_lists = self.cur.fetchall()
+        if not profile_lists

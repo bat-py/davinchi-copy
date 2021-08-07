@@ -10,7 +10,7 @@ class SqlRequests:
             password='crow999',
             db='telegrambot',
             charset='utf8mb4',
-#            cursorclass=DictCursor,
+            cursorclass=DictCursor,
         )
 
         self.cur = self.con.cursor()
@@ -58,18 +58,33 @@ class SqlRequests:
         as21 = ("girl", "Девушка","Girl", "Дівчина" )
         as22 = ("wrong_gender", "Нет такого варианта ответа", "There is no such answer option", "Немає такого варіанту відповіді")
         as23 = ("wrong_interested", "Нет такого варианта ответа", "There is no such answer option", "Немає такого варіанту відповіді")
+        as233 = ("wrong_confirm", "Нет такого варианта ответа", "There is no such answer option", "Немає такого варіанту відповіді")
         as24 = ("your_profile_looks_like", "Так выглядит твоя анкета:", "This is what your profile looks like:", "Так виглядає твоя анкета:")
         as244 = ("confirm_profile", "Все верно?", "Is that right?", "Все вірно?")
 
-        as25 = ("send_message_to_another_member", "Напиши сообщение для этого пользователя")
-        as26 = ('warning_short_message', 'Придумай что-то поинтереснее, таким сообщением никого не удивишь ;)', )
+        as25 = ("send_message_to_another_member",'Напиши сообщение для этого пользователя', "Write a message for this user", 'Напиши повідомлення для цього користувача')
+        as26 = ('warning_short_message', 'Придумай что-то поинтереснее, таким сообщением никого не удивишь 😉',
+                'Come up with something more interesting, this message will not surprise anyone 😉',
+                'Придумай щось цікавіше, таким повідомленням нікого не здивуєш 😉')
 
-        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as25)
+        as27 = ("like_emoji", "❤️", "❤️", "❤️")
+        as28 = ("send_message_emoji", "💌", "💌", "💌" )
+        as29 = ("dislike", "👎", '👎', '👎')
+        as30 = ("zzz", '💤', '💤', '💤')
+
+
+
+
+        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as26)
         self.con.commit()
 
     def b(self):
-        self.cur.execute(f"select uk from bot_messages;")
-        print(self.cur.fetchall())
+        self.cur.execute("SELECT * FROM members  where interested = 'mm'")
+        a = self.cur.fetchall()
+        if not a:
+            print(a, 'ass')
+        else:
+            print(a)
 s = SqlRequests()
-s.a()
+s.b()
 
