@@ -274,6 +274,7 @@ def main():
             bot.register_next_step_handler(msg, askConfirm)
 
 
+    # Каждый раз при вызове возврашает рандомные анкеты с 4 кнопками (like_emoji, send_message_emoji, dislike, zzz
     def random_profile_sender(chat_id):
         lang = data.get_lang(chat_id)
         interested = data.get_member_info(chat_id, interested=True)['interested']
@@ -281,47 +282,66 @@ def main():
 
         member_profile = f"{member['name']}, {member['age']}, {member['city']}\n{member['about']}"
 
-        like_emoji = data.get_bot_messages('like_emoji', lang=lang)
-        send_message_emoji = data.get_bot_messages('send_message_emoji', lang=lang)
-        dislike = data.get_bot_messages('dislike', lang=lang)
-        zzz = data.get_bot_messages('zzz', lang=lang)
-        four_buttons = reply_keyboard_creator([[like_emoji, send_message_emoji, dislike, zzz]], one_time_keyboard=True)
+        four_buttons = [
+        data.get_bot_messages('like_emoji', lang=lang),
+        data.get_bot_messages('send_message_emoji', lang=lang),
+        data.get_bot_messages('dislike', lang=lang),
+        data.get_bot_messages('zzz', lang=lang)
+        ]
+        buttons = reply_keyboard_creator([four_buttons], one_time_keyboard=True)
         
         if member['avatar_type'] == 'photo':
-            msg = bot.send_photo(chat_id, member['avatar'], caption=member_profile, reply_markup=four_buttons)
+            msg = bot.send_photo(chat_id, member['avatar'], caption=member_profile, reply_markup=buttons)
         else:
-            msg = bot.send_video(chat_id, member['avatar'], caption=member_profile, reply_markup=four_buttons)
+            msg = bot.send_video(chat_id, member['avatar'], caption=member_profile, reply_markup=buttons)
 
-        bot.register_next_step_handler(msg, lambda press_four_buttons: press_four_buttons(4))
+        bot.register_next_step_handler(msg, press_four_buttons, lang, member, four_buttons)
 
-    def press_four_buttons(message, num):
-        print(num)
-        lang = data.get_lang(message.chat.id)
-        like_emoji = data.get_bot_messages('like_emoji', lang=lang)
-        send_message_emoji = data.get_bot_messages('send_message_emoji', lang=lang)
-        dislike = data.get_bot_messages('dislike', lang=lang)
-        zzz = data.get_bot_messages('zzz', lang=lang)
 
-        if message.text == like_emoji:
+    # Вызывается когда пользователь нажимает на кнопки (like_emoji, send_message_emoji, dislike, zzz)
+    def press_four_buttons(message, lang, member, four_buttons):
+        # Если пользователь нажал на кнопку like_emoji, перенаправляет на функцию random_profile_sender
+        if message.text == four_buttons[0]:
+            data.plus_one_like(member['id'])
             random_profile_sender(message.chat.id)
-        elif message.text == send_message_emoji:
+
+        # Если пользователь нажал на send_message_emoji, перенаправляет на функцию send_message_to_another_member
+        elif message.text == four_buttons[1]:
             mesg = data.get_bot_messages('send_message_to_another_member', lang=lang)
             button_text = data.get_bot_messages('go_back')
             button = reply_keyboard_creator([[button_text]], one_time_keyboard=True)
             msg = bot.send_message(message.chat.id, mesg, reply_markup=button)
-            bot.register_next_step_handler(msg, send_message_to_another_member)
+            bot.register_next_step_handler(msg, send_message_to_another_member, lang, member)
 
-    def send_message_to_another_member(message):
-        lang = data.get_lang(message.chat.id)
+        # Если пользователь нажал на dislike
+        elif message.text == four_buttons[2]:
+            data.plus_one_dislike(member['id'])
+            random_profile_sender(message.chat.id)
 
+        # Если пользователь нажал на zzz
+        elif message.text == four_buttons[3]:
+
+
+
+    # Вызывается когда пользователь нажимает на кнопку send_message_emoji
+    def send_message_to_another_member(message, lang, member, button_text):
         if message.content_type == 'text':
-            pass
+            if message.text == button_text:
+                random_profile_sender(message.chat.id)
+            else:
+                message_sender_name = data.get_member_info(message.chat.id, name=True)['name']
+                bot_mesg = data.get_bot_messages('message_from', lang=lang)
+                mesg = f"{bot_mesg}{message_sender_name}:\n{message.text}"
+
+
+                answear_or_no_buttons = 0
+                bot.send_message(member['id'], mesg, )
+
         else:
             mesg = data.get_bot_messages('only_message', lang=lang)
-            button_text = data.get_bot_messages('go_back')
             button = reply_keyboard_creator([[button_text]], one_time_keyboard=True)
             msg = bot.send_message(message.chat.id, mesg, reply_markup=button)
-            bot.register_next_step_handler(msg, send_message_to_another_member)
+            bot.register_next_step_handler(msg, send_message_to_another_member, lang, member)
 
 
         

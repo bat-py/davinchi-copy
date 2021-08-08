@@ -74,8 +74,12 @@ class SqlRequests:
 
         as31 = ("go_back", "Вернуться назад", "Go back", "Повернутися назад")
         as32 = ("only_message", "Можно отправить только сообщение", "You can only send a message", "Можна надіслати лише повідомлення")
+        as33 = ("message_from: ", "Сообщение от ", "Message from ", "Повідомлення від ")
 
-        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as32)
+        as34 = ("answear_message", "Ответить", "Answer", "Відповівши")
+        as35 = ("continue_see_profiles", "Смотреть анкеты", "View questionnaires", "Дивитися анкети")
+
+        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as35)
         self.con.commit()
 
     def b(self):

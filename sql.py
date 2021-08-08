@@ -113,7 +113,7 @@ class SqlRequests:
 
 # Gets all bot's messages in three language
     def get_bot_messages(self, message, lang=None):
-        self.cur.execute("SELECT ru, eng, uk FROM bot_messages WHERE message = %s", (message,))
+        self.cur.execute("SELECT ru, eng, uk FROM bot_messages WHERE message = %s;", (message,))
         if lang:
             return self.cur.fetchone()[lang]
         else:
@@ -121,22 +121,25 @@ class SqlRequests:
 
 
 
-
-
-
-
     def random_profile_select(self, chat_id, interested, city=None):
         while True:
-            self.cur.execute("SELECT * FROM members WHERE interested = %s", (interested, ))
+            self.cur.execute("SELECT * FROM members WHERE interested = %s;", (interested, ))
             profile_list = self.cur.fetchall()
             if not profile_list:
-                self.cur.execute("SELECT * FROM members")
+                self.cur.execute("SELECT * FROM members;")
                 profile_list = self.cur.fetchall()
             member = random.choice(profile_list)
             if member['avatar'] and member['age'] and member['name'] and member['city'] and member['id'] != chat_id:
                 return member
-                
 
+
+    def plus_one_like(self, chat_id):
+        self.cur.execute("UPDATE members SET likes = likes+1 WHERE id=%s;", (chat_id, ))
+        self.con.commit()
+
+    def plus_one_dislike(self, chat_id):
+        self.cur.execute("UPDATE members SET dislikes = dislikes+1 WHERE id=%s", (chat_id, ))
+        self.con.commit()
 
     
 
