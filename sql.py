@@ -1,3 +1,4 @@
+
 import pymysql
 from pymysql.cursors import DictCursor 
 import random
@@ -117,6 +118,10 @@ class SqlRequests:
             return self.cur.fetchone()[lang]
         else:
             return self.cur.fetchone()
+
+
+
+
 
 
 

@@ -81,8 +81,6 @@ def main():
             msg = bot.send_message(message.chat.id, wrong_age)
             bot.register_next_step_handler(msg, askAge)
 
-
-
     def askGender(message):
         lang = data.get_lang(message.chat.id)
         gender = message.text
@@ -118,11 +116,9 @@ def main():
             msg = bot.send_message(message.chat.id, wrong_gender, reply_markup=buttons)
             bot.register_next_step_handler(msg, askGender)
 
-
     def askInterested(message):
         lang = data.get_lang(message.chat.id)
         interested = message.text
-
 
         if interested  == data.get_bot_messages('interested_button_man', lang=lang):
             data.update_member_info(message.chat.id, interested='interested_button_man')
@@ -154,8 +150,6 @@ def main():
             msg = bot.send_message(message.chat.id, wrong_interested, reply_markup=interested_buttons)
             bot.register_next_step_handler(msg, askInterested)
 
-
-
     def askCity(message):
         lang = data.get_lang(message.chat.id)
         city = message.text
@@ -171,7 +165,6 @@ def main():
             which_city = data.get_bot_messages(message='which_city', lang=lang)
             msg = bot.send_message(message.chat.id, which_city)
             bot.register_next_step_handler(msg, askCity)
-
 
     # Ask member's name and creates button with member's name
     def askName(message):
@@ -212,7 +205,6 @@ def main():
             skip_button = reply_keyboard_creator([[skip_button_text]], one_time_keyboard=True)
             msg = bot.send_message(message.chat.id, about, reply_markup=skip_button)
             bot.register_next_step_handler(msg, askAbout)
-
 
     def askAvatar(message):
         lang = data.get_lang(message.chat.id)
@@ -264,7 +256,6 @@ def main():
             msg = bot.send_message(message.chat.id, get_photo_video)
             bot.register_next_step_handler(msg, askAvatar)
 
-
     def askConfirm(message):
         lang = data.get_lang(message.chat.id)
 
@@ -301,10 +292,37 @@ def main():
         else:
             msg = bot.send_video(chat_id, member['avatar'], caption=member_profile, reply_markup=four_buttons)
 
-        bot.register_next_step_handler(msg, press_four_buttons)
+        bot.register_next_step_handler(msg, lambda press_four_buttons: press_four_buttons(4))
 
-    def press_four_buttons(message):
-       
+    def press_four_buttons(message, num):
+        print(num)
+        lang = data.get_lang(message.chat.id)
+        like_emoji = data.get_bot_messages('like_emoji', lang=lang)
+        send_message_emoji = data.get_bot_messages('send_message_emoji', lang=lang)
+        dislike = data.get_bot_messages('dislike', lang=lang)
+        zzz = data.get_bot_messages('zzz', lang=lang)
+
+        if message.text == like_emoji:
+            random_profile_sender(message.chat.id)
+        elif message.text == send_message_emoji:
+            mesg = data.get_bot_messages('send_message_to_another_member', lang=lang)
+            button_text = data.get_bot_messages('go_back')
+            button = reply_keyboard_creator([[button_text]], one_time_keyboard=True)
+            msg = bot.send_message(message.chat.id, mesg, reply_markup=button)
+            bot.register_next_step_handler(msg, send_message_to_another_member)
+
+    def send_message_to_another_member(message):
+        lang = data.get_lang(message.chat.id)
+
+        if message.content_type == 'text':
+            pass
+        else:
+            mesg = data.get_bot_messages('only_message', lang=lang)
+            button_text = data.get_bot_messages('go_back')
+            button = reply_keyboard_creator([[button_text]], one_time_keyboard=True)
+            msg = bot.send_message(message.chat.id, mesg, reply_markup=button)
+            bot.register_next_step_handler(msg, send_message_to_another_member)
+
 
         
 

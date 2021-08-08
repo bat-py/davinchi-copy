@@ -72,10 +72,10 @@ class SqlRequests:
         as29 = ("dislike", "👎", '👎', '👎')
         as30 = ("zzz", '💤', '💤', '💤')
 
+        as31 = ("go_back", "Вернуться назад", "Go back", "Повернутися назад")
+        as32 = ("only_message", "Можно отправить только сообщение", "You can only send a message", "Можна надіслати лише повідомлення")
 
-
-
-        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as26)
+        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as32)
         self.con.commit()
 
     def b(self):
@@ -83,5 +83,5 @@ class SqlRequests:
         a = self.cur.fetchall()
         print(a)
 s = SqlRequests()
-s.b()
+s.a()
 

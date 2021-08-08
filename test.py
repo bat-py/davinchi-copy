@@ -1,6 +1,9 @@
 import telebot
 from sql import SqlRequests as SR
 
+#pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during query')
+
+
 bot = telebot.TeleBot('1018761895:AAE9zGMHZxYZlC_6kyRLAmTBC0Oubpp-QUQ')
 
 
