@@ -75,12 +75,14 @@ class SqlRequests:
         as31 = ("go_back", "Вернуться назад", "Go back", "Повернутися назад")
         as32 = ("only_message", "Можно отправить только сообщение", "You can only send a message", "Можна надіслати лише повідомлення")
 
-        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as32)
+        as55 = ('message_from', 'Сообщение от', 'Message from', 'Повідомлення від')
+
+        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as55)
         self.con.commit()
 
     def b(self):
-        self.cur.execute("SELECT * FROM members WHERE interested = %s", ("interested_button_man", ))
-        a = self.cur.fetchall()
+        self.cur.execute("SELECT ru FROM bot_messages WHERE message = %s", ("message_from", ))
+        a = self.cur.fetchone()
         print(a)
 s = SqlRequests()
 s.a()

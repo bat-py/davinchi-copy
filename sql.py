@@ -119,12 +119,6 @@ class SqlRequests:
         else:
             return self.cur.fetchone()
 
-
-
-
-
-
-
     def random_profile_select(self, chat_id, interested, city=None):
         while True:
             self.cur.execute("SELECT * FROM members WHERE interested = %s", (interested, ))
@@ -137,8 +131,13 @@ class SqlRequests:
                 return member
                 
 
+    def plus_like(self, id):
+        self.cur.execute("UPDATE members SET likes = likes+1 WHERE id = %s", (id, ))
+        self.con.commit()
 
-    
+    def plus_dislike(self, id):
+        self.cur.execute("UPDATE members SET dislikes = dislikes+1 WHERE id = %s", (id, ))
+        self.con.commit()
 
 
 
