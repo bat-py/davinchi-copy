@@ -129,7 +129,6 @@ class SqlRequests:
             member = random.choice(profile_list)
             if member['avatar'] and member['age'] and member['name'] and member['city'] and member['id'] != chat_id:
                 return member
-                
 
     def plus_like(self, id):
         self.cur.execute("UPDATE members SET likes = likes+1 WHERE id = %s", (id, ))
@@ -139,7 +138,17 @@ class SqlRequests:
         self.cur.execute("UPDATE members SET dislikes = dislikes+1 WHERE id = %s", (id, ))
         self.con.commit()
 
-
+    def check_exist_id_name_city_avatar(self, id):
+        while True:
+            self.cur.execute("SELECT * FROM members WHERE id = %s", (id,))
+            member = self.cur.fetchone()
+            if member:
+                if member['avatar'] and member['age'] and member['name'] and member['city']:
+                    return True
+                else:
+                    return False
+            else:
+                return False
 
 
 

@@ -69,15 +69,18 @@ class SqlRequests:
 
         as27 = ("like_emoji", "❤️", "❤️", "❤️")
         as28 = ("send_message_emoji", "💌", "💌", "💌" )
-        as29 = ("dislike", "👎", '👎', '👎')
-        as30 = ("zzz", '💤', '💤', '💤')
+        as29 = ("dislike_emoji", "👎", '👎', '👎')
+        as30 = ("zzz_emoji", '💤', '💤', '💤')
 
         as31 = ("go_back", "Вернуться назад", "Go back", "Повернутися назад")
         as32 = ("only_message", "Можно отправить только сообщение", "You can only send a message", "Можна надіслати лише повідомлення")
 
         as55 = ('message_from', 'Сообщение от', 'Message from', 'Повідомлення від')
 
-        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as55)
+        as56 = ("wrong_main_menu_button", "Нет такого варианта ответа", "There is no such answer option", "Немає такого варіанту відповіді")
+
+
+        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as56)
         self.con.commit()
 
     def b(self):
