@@ -186,7 +186,7 @@ class Registration:
             self.data.update_member_info(message.chat.id, avatar=file_id)
             self.data.update_member_info(message.chat.id, avatar_type='photo')
 
-            m = self.data.get_bot_messages('your_profile_looks_like', lang=lang)
+            m = self.data.get_bot_messages('profile_looks_like', lang=lang)
             self.bot.send_message(message.chat.id, m)
 
             info = self.data.get_member_info(message.chat.id, name=True, age=True, city=True, about=True)
@@ -207,7 +207,7 @@ class Registration:
             self.data.update_member_info(message.chat.id, avatar=file_id)
             self.data.update_member_info(message.chat.id, avatar_type='video')
 
-            m = self.data.get_bot_messages('your_profile_looks_like', lang=lang)
+            m = self.data.get_bot_messages('profile_looks_like', lang=lang)
             self.bot.send_message(message.chat.id, m)
 
             info = self.data.get_member_info(message.chat.id, name=True, age=True, city=True, about=True)

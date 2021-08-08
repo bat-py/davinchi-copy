@@ -40,9 +40,11 @@ def main():
         
         if member['avatar_type'] == 'photo':
             msg = bot.send_photo(chat_id, member['avatar'], caption=member_profile, reply_markup=four_buttons)
-        else:
+        elif member['avatar_type'] == 'video':
             msg = bot.send_video(chat_id, member['avatar'], caption=member_profile, reply_markup=four_buttons)
-
+        else:
+            pass
+            # photo or video not found
         bot.register_next_step_handler(msg, press_four_buttons, lang, member, main_menu_buttons)
 
     def press_four_buttons(message, lang, member, main_menu_buttons):
@@ -59,6 +61,7 @@ def main():
             button = reply_keyboard_creator([[go_back_button_text]], one_time_keyboard=True)
             msg = bot.send_message(message.chat.id, mesg, reply_markup=button)
             bot.register_next_step_handler(msg, send_members_message_to_another_member, lang, member, go_back_button_text)
+
         # Если пользователь нажал на dislike_emoji, перенаправляет на главное меню обратно
         elif message.text == main_menu_buttons[2]:
             data.plus_dislike(member['id'])
@@ -66,7 +69,13 @@ def main():
 
         # Если пользователь нажал на zzz_emoji, перенаправляет на функцию ...
         elif message.text == main_menu_buttons[3]:
-            pass
+            zzz_caption = data.get_bot_messages('after_press_zzz_caption', lang=lang)
+            bot.send_message(message.chat.id, zzz_caption)
+
+            zzz_body = data.get_bot_messages('after_press_zzz_body', lang=lang)
+            buttons = reply_keyboard_creator([['1 🚀', '2', '3', '4']], one_time_keyboard=True)
+            msg = bot.send_message(message.chat.id, zzz_body, reply_markup=buttons)
+            bot.register_next_step_handler(msg, after_press_1234, lang)
 
         # Если пользователь отправил какой-то текст или файлы, происходит рекурсия
         else:
@@ -74,7 +83,6 @@ def main():
             four_buttons = reply_keyboard_creator([main_menu_buttons], one_time_keyboard=False)
             msg = bot.send_message(message.chat.id, mesg, reply_markup=four_buttons)
             bot.register_next_step_handler(msg, press_four_buttons, lang, member, main_menu_buttons)
-
 
     def send_members_message_to_another_member(message, lang, member, go_back_button_text):
         ''' Вызывается когда пользователь нажамает на send_message_emoji '''
@@ -95,6 +103,28 @@ def main():
             msg = bot.send_message(message.chat.id, mesg, reply_markup=button)
             bot.register_next_step_handler(msg, send_members_message_to_another_member, lang, member, go_back_button_text)
 
+    def after_press_1234(message, lang):
+        if message.text == '1 🚀':
+            random_profile_sender(message.chat.id)
+        elif message.text == '2':
+            profile_looks_like = data.get_bot_messages('profile_looks_like', lang=lang)
+            bot.send_message(message.chat.id, profile_looks_like)
+
+            member = data.get_member_info(message.chat.id, name=True, age=True, city=True, avatar=True, avatar_type=True, about=True)
+            member_profile = f"{member['name']}, {member['age']}, {member['city']}\n{member['about']}"
+            if member['avatar_type'] == 'photo':
+                bot.send_photo(message.chat.id, member['avatar'], caption=member_profile)
+            elif member['avatar_type'] == 'video':
+                bot.send_video(message.chat.id, member['avatar'], caption=member_profile)
+            else:
+                pass
+                # photo or video not found
+
+
+        elif message.text == '3':
+            pass
+        elif message.text == '4':
+            pass
 
 
     @bot.message_handler(content_types=['text'])
