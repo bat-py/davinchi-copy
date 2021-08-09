@@ -87,7 +87,14 @@ class SqlRequests:
 
         as59 = ('profile_looks_like', 'Так выглядит твоя анкета:', 'Your profile looks like:', 'Так виглядає твоя анкета:')
 
-        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as57)
+        as60 = ('profile_settings',
+                '1. Заполнить анкету заново.\n2. Изменить фото/видео.\n3. Изменить текст анкеты.\n4. Привязка Instagram.\n5. Смотреть анкеты.',
+                '1. Fill out the questionnaire again.\n2. Change the photo/video.\n3. Change the text of the questionnaire.\n4.Snap Instagram.\n5. View the questionnaires.',
+                "1. Заповнити анкету заново.\n2. Змінити фото / відео.\n3. Змінити текст анкети.\n4. Прив'язка Instagram.\n5. Дивитися анкети.")
+
+        as61 = ('edit_avatar_button', )
+
+        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as58)
         self.con.commit()
 
     def b(self):

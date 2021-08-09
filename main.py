@@ -3,6 +3,7 @@ import telebot
 from sql import SqlRequests
 from keyboar_creators import *
 from registration import Registration
+from members_settings import *
 
 def main():
     @bot.message_handler(commands=['start'])
@@ -104,27 +105,31 @@ def main():
             bot.register_next_step_handler(msg, send_members_message_to_another_member, lang, member, go_back_button_text)
 
     def after_press_1234(message, lang):
+        ''' После нажатия zzz_emoji бот будет ожидать в ответ 4 кнопки (1 🚀, 2, 3, 4)'''
+        # 1. Смотреть анкеты.
         if message.text == '1 🚀':
             random_profile_sender(message.chat.id)
+
+        # 2. Моя анкета.
         elif message.text == '2':
-            profile_looks_like = data.get_bot_messages('profile_looks_like', lang=lang)
-            bot.send_message(message.chat.id, profile_looks_like)
 
-            member = data.get_member_info(message.chat.id, name=True, age=True, city=True, avatar=True, avatar_type=True, about=True)
-            member_profile = f"{member['name']}, {member['age']}, {member['city']}\n{member['about']}"
-            if member['avatar_type'] == 'photo':
-                bot.send_photo(message.chat.id, member['avatar'], caption=member_profile)
-            elif member['avatar_type'] == 'video':
-                bot.send_video(message.chat.id, member['avatar'], caption=member_profile)
-            else:
-                pass
-                # photo or video not found
+            buttons = reply_keyboard_creator([['1', '2', '3', '4', '5 🚀']], one_time_keyboard=True)
+            msg = bot.send_message(message.chat.id, mesg, reply_markup=buttons)
 
+            # Вызывает функции в members_setting.py
+            bot.register_next_step_handler(msg, MembersSettings, start_command, bot, data, lang)
 
+        # 3. Я больше не хочу никого искать.
         elif message.text == '3':
             pass
+
+        # 4. Пригласи друзей - получи больше лайков
         elif message.text == '4':
             pass
+
+
+
+
 
 
     @bot.message_handler(content_types=['text'])
