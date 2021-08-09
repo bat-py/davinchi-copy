@@ -22,7 +22,7 @@ class SqlRequests:
         connection.commit()
         connection.close()
 
-    def update_member_info(self, id, lang=None, name=None, age=None, gender=None, interested=None, city=None, about=None, avatar=None, avatar_type=None):
+    def update_member_info(self, id, lang=None, name=None, age=None, gender=None, interested=None, city=None, about=None, avatar=None, avatar_type=None, instagram=None):
         ''' Insert or Update members info '''
         connection = create_connection()
         cur = connection.cursor()
@@ -62,17 +62,21 @@ class SqlRequests:
         if avatar_type:
             cur.execute("UPDATE members SET avatar_type = %s WHERE id = %s", (avatar_type, id))
             connection.commit()
+
+        if instagram:
+            cur.execute("UPDATE members SET instagram = %s WHERE id = %s", (instagram, id))
+            connection.commit()
         connection.close()
 
     def del_member(self, id):
         connection = create_connection()
         cur = connection.cursor()
 
-        cur.execute("DELETE FROM members WHERE id LIKE %s", (id, ))
+        cur.execute("DELETE FROM members WHERE id = %s", (id, ))
         connection.commit()
         connection.close()
 
-    def get_member_info(self, id, name=None, age=None, gender=None, interested=None, city=None, about=None, avatar=None, avatar_type=None, likes=None, dislikes=None):
+    def get_member_info(self, id, name=None, age=None, gender=None, interested=None, city=None, about=None, avatar=None, avatar_type=None, likes=None, dislikes=None, instagram=None):
         ''' Returns dict data '''
         connection = create_connection()
         cur = connection.cursor()
@@ -108,6 +112,9 @@ class SqlRequests:
         if dislikes:
             cur.execute("SELECT dislikes FROM members WHERE id = %s", (id,))
             info['dislikes'] = cur.fetchone()['dislikes']
+        if instagram:
+            cur.execute("SELECT instagram FROM members WHERE id = %s", (id,))
+            info['instagram'] = cur.fetchone()['instagram']
 
         connection.close()
         return info

@@ -92,14 +92,62 @@ class SqlRequests:
                 '1. Fill out the questionnaire again.\n2. Change the photo/video.\n3. Change the text of the questionnaire.\n4.Snap Instagram.\n5. View the questionnaires.',
                 "1. Заповнити анкету заново.\n2. Змінити фото / відео.\n3. Змінити текст анкети.\n4. Прив'язка Instagram.\n5. Дивитися анкети.")
 
-        as61 = ('edit_avatar_button', )
+        as62 = ('saved', "Сохранили изменения, посмотрим как выглядит твоя анкета теперь",
+                "We saved the changes, let's see what your profile looks like now",
+                "Зберегли зміни, подивимося як виглядає твоя анкета тепер"
+                )
 
-        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as58)
+        as63 = ("send_me_instagram_profile", "Пришли ссылку на свою страницу или логин в Instagram", "Send a link to your page or login to Instagram", "Прийшли посилання на свою сторінку або логін в Instagram")
+
+        as64 = ("turn_off_profile_confirm",
+                "Так ты не узнаешь, что кому-то нравишься... Точно хочешь отключить свою анкету?\n\n1. Да, отключить анкету.\n2. Нет, вернуться назад.",
+                "This way you won't know that someone likes you... Are you sure you want to disable your profile?\n\n1. Yes, disable the questionnaire.\n2. No, go back.",
+                "Так ти не дізнаєшся, що комусь подобаєшся... Точно хочеш відключити свою анкету?\n\n1. Так, відключити анкету.\n2. Ні, повернутися назад."
+                )
+
+        as65 = ('your_profile_deleted',
+                "Надеюсь ты нашел кого-то благодаря мне! Рад был с тобой пообщаться, будет скучно – пиши, обязательно найдем тебе кого-нибудь\n\n/start - чтобы активировать анкету",
+                "I hope you found someone thanks to me! I was glad to talk to you, it will be boring-write, we will definitely find you someone\n\n/start - to activate the questionnaire",
+                "Сподіваюся ти знайшов когось завдяки мені! Радий був з тобою поспілкуватися, буде нудно-пиши, обов'язково знайдемо тобі кого-небудь\n\n/start - щоб активувати анкету"
+                )
+
+
+        as66 = ('invite_friends',
+                "Пригласи друзей и получи больше лайков!",
+                "Invite your friends and get more likes!",
+                "Запроси друзів і отримай більше лайків!")
+
+        as67 = ('your_statistic',
+                "Твоя статистика",
+                "Your statistics",
+                "Твоя статистика"
+                )
+
+        as68 = ('in_seven_day',
+                "Пришло за 7 дней:",
+                "Received in 7 days:",
+                "Прийшло за 7 днів:")
+
+        as69 = ("bonus",
+                "Бонус к силе анкеты:",
+                "Bonus to the strength of the questionnaire:",
+                "Бонус до сили анкети:"
+                )
+
+        as70 = ("your_link",
+                "Перешли друзьям или размести в своих соцсетях.\nВот твоя личная ссылка 👇",
+                "Send it to your friends or post it in your social networks.\nHere is your personal link 👇",
+                "Перейшли друзям або розмісти в своїх соцмережах.\nОсь ваша особиста посилання 👇")
+
+        as71 = ("wrong_answear", "Нет такого варианта ответа", "There is no such answer option",
+                "Немає такого варіанту відповіді")
+
+        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as71)
         self.con.commit()
 
     def b(self):
-        self.cur.execute("SELECT ru FROM bot_messages WHERE message = %s", ("message_from", ))
-        a = self.cur.fetchone()
+        #self.cur.execute("DELETE FROM bot_messages WHERE message = %s", ("your_link", ))
+        a = self.con.commit()
         print(a)
 s = SqlRequests()
 s.a()

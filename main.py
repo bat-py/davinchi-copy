@@ -112,22 +112,33 @@ def main():
 
         # 2. Моя анкета.
         elif message.text == '2':
-
-            buttons = reply_keyboard_creator([['1', '2', '3', '4', '5 🚀']], one_time_keyboard=True)
-            msg = bot.send_message(message.chat.id, mesg, reply_markup=buttons)
-
-            # Вызывает функции в members_setting.py
-            bot.register_next_step_handler(msg, MembersSettings, start_command, bot, data, lang)
+            settings = MembersSettings(bot, start_command=start_command, random_profile_sender=random_profile_sender)
+            settings.profile_looks_like(message, lang=lang)
 
         # 3. Я больше не хочу никого искать.
         elif message.text == '3':
-            pass
+            settings = MembersSettings(bot, after_press_1234=after_press_1234)
+            settings.turn_off_profile_menu(message, lang=lang)
+
+
 
         # 4. Пригласи друзей - получи больше лайков
         elif message.text == '4':
-            pass
+            go_back= data.get_bot_messages('go_back', lang=lang)
+            invite_friends = data.get_bot_messages('invite_friends', lang=lang)
+            your_statistic = data.get_bot_messages('your_statistic', lang=lang)
+            in_seven_day = data.get_bot_messages('in_seven_day', lang=lang)
+            bonus = data.get_bot_messages('bonus', lang=lang)
+            your_link = data.get_bot_messages('your_link', lang=lang)
 
+            msg = f"{invite_friends}\n\n{your_statistic}\n{in_seven_day}\n{bonus}\n\n{your_link}"
+            bot.send_message(message.chat.id, msg)
 
+        else:
+            wrong_answear_text = data.get_bot_messages('wrong_answear', lang=lang)
+            buttons = reply_keyboard_creator([['1 🚀', '2', '3', '4']], one_time_keyboard=True)
+            msg = bot.send_message(message.chat.id, wrong_answear_text, reply_markup=buttons)
+            bot.register_next_step_handler(msg, after_press_1234, lang)
 
 
 
