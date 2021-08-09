@@ -120,11 +120,11 @@ def main():
             settings = MembersSettings(bot, after_press_1234=after_press_1234)
             settings.turn_off_profile_menu(message, lang=lang)
 
-
-
         # 4. Пригласи друзей - получи больше лайков
         elif message.text == '4':
             go_back= data.get_bot_messages('go_back', lang=lang)
+            go_back_button = reply_keyboard_creator([[go_back]], one_time_keyboard=True)
+
             invite_friends = data.get_bot_messages('invite_friends', lang=lang)
             your_statistic = data.get_bot_messages('your_statistic', lang=lang)
             in_seven_day = data.get_bot_messages('in_seven_day', lang=lang)
@@ -132,8 +132,8 @@ def main():
             your_link = data.get_bot_messages('your_link', lang=lang)
 
             msg = f"{invite_friends}\n\n{your_statistic}\n{in_seven_day}\n{bonus}\n\n{your_link}"
-            bot.send_message(message.chat.id, msg)
-
+            bot.send_message(message.chat.id, msg, reply_markup=go_back_button)
+            
         else:
             wrong_answear_text = data.get_bot_messages('wrong_answear', lang=lang)
             buttons = reply_keyboard_creator([['1 🚀', '2', '3', '4']], one_time_keyboard=True)

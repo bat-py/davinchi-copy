@@ -11,7 +11,7 @@ class MembersSettings:
 
     def profile_looks_like(self, message, lang):
         ''' Создает главное меню настроек. Показывает анкету с 5 кнопками и функция member_settings ждет ответ (1 или 2 ... или 5  '''
-        buttons = ['1', '2', '3', '4', '5 🚀']
+        buttons_text = ['1', '2', '3', '4', '5 🚀']
         profile_looks_like = self.data.get_bot_messages('profile_looks_like', lang=lang)
         self.bot.send_message(message.chat.id, profile_looks_like)
 
@@ -25,9 +25,9 @@ class MembersSettings:
 
         mesg = self.data.get_bot_messages('profile_settings', lang=lang)
 
-        buttons = reply_keyboard_creator([buttons], one_time_keyboard=True)
+        buttons = reply_keyboard_creator([buttons_text], one_time_keyboard=True)
         msg = self.bot.send_message(message.chat.id, mesg, reply_markup=buttons)
-        self.bot.register_next_step_handler(msg, self.member_settings, message, buttons, lang)
+        self.bot.register_next_step_handler(msg, self.member_settings, buttons_text, lang)
 
     def member_settings(self, message, buttons, lang):
         go_back_text = self.data.get_bot_messages('go_back', lang=lang)

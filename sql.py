@@ -163,12 +163,15 @@ class SqlRequests:
             #self.cur.execute("SELECT * FROM members WHERE interested = %s", (interested, ))
             #profile_list = self.cur.fetchall()
             #if not profile_list:
-            cur.execute("SELECT * FROM members")
-            profile_list = cur.fetchall()
-            connection.close()
-            member = random.choice(profile_list)
-            if member['avatar'] and member['age'] and member['name'] and member['city'] and member['id'] != chat_id:
-                return member
+            try:
+                cur.execute("SELECT * FROM members")
+                profile_list = cur.fetchall()
+                connection.close()
+                member = random.choice(profile_list)
+                if member['avatar'] and member['age'] and member['name'] and member['city'] and member['id'] != chat_id:
+                    return member
+            except:
+                continue
 
     def plus_like(self, id):
         connection = create_connection()
