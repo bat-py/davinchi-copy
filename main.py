@@ -106,10 +106,11 @@ def main():
                 bot.send_message(member['id'], mesg,parse_mode='html')
 
         else:
+            lang = data.get_lang(message.chat.id)
             mesg = data.get_bot_messages('only_message', lang=lang)
             button = reply_keyboard_creator([[go_back_button_text]], one_time_keyboard=True)
             msg = bot.send_message(message.chat.id, mesg, reply_markup=button)
-            bot.register_next_step_handler(msg, send_members_message_to_another_member, lang, member, go_back_button_text)
+            bot.register_next_step_handler(msg, send_members_message_to_another_member, member, go_back_button_text)
 
     def after_press_1234(message, lang):
         ''' После нажатия zzz_emoji бот будет ожидать в ответ 4 кнопки (1 🚀, 2, 3, 4)'''

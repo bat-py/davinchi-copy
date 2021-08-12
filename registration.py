@@ -24,7 +24,7 @@ class Registration:
 
         elif answear == '🇺🇦 Почати':
             self.data.insert_id_lang(chat_id, 'uk')
-            bot_message = self.data.get_self.bot_messages('age', 'uk')
+            bot_message = self.data.get_bot_messages('age', 'uk')
             msg = self.bot.send_message(message.chat.id, bot_message)
             self.bot.register_next_step_handler(msg, self.askAge)
         else:

@@ -4,7 +4,8 @@ import random
 
 def create_connection():
     connection = pymysql.connect(
-        host='84.252.74.115',
+#        host='84.252.74.115',
+        host='localhost',
         user='crow',
         password='crow999',
         db='telegrambot',
@@ -172,14 +173,17 @@ class SqlRequests:
             #profile_list = self.cur.fetchall()
             #if not profile_list:
             try:
-                cur.execute("SELECT * FROM members;")
+                connection = create_connection()
+                cur = connection.cursor()
+                cur.execute("SELECT * FROM members")
+
                 profile_list = cur.fetchall()
                 connection.close()
                 member = random.choice(profile_list)
                 if member['avatar'] and member['age'] and member['name'] and member['city'] and member['id'] != chat_id:
                     return member
             except:
-                print('blya')
+                print('try')
                 continue
 
 #    def plus_like(self, id):
