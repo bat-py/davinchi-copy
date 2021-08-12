@@ -230,7 +230,7 @@ class SqlRequests:
         check = cur.fetchone()
 
         if not check:
-            cur.execute("INSERT INTO disliked_members(MemberId, LikedMemberId) VALUE(%s, %s)", (member_id, disliked_member_id))
+            cur.execute("INSERT INTO disliked_members(MemberId, DislikedMemberId) VALUE(%s, %s)", (member_id, disliked_member_id))
             connection.commit()
         connection.close()
 
