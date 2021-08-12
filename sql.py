@@ -226,7 +226,7 @@ class SqlRequests:
         connection = create_connection()
         cur = connection.cursor()
 
-        cur.execute("SELECT id FROM disliked_members WHERE MemberId = %s AND LikedMemberId = %s", (member_id, disliked_member_id))
+        cur.execute("SELECT id FROM disliked_members WHERE MemberId = %s AND DislikedMemberId = %s", (member_id, disliked_member_id))
         check = cur.fetchone()
 
         if not check:
