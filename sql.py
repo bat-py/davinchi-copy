@@ -222,15 +222,15 @@ class SqlRequests:
 
         connection.close()
 
-    def dislike(self, member_id, liked_member_id):
+    def dislike(self, member_id, disliked_member_id):
         connection = create_connection()
         cur = connection.cursor()
 
-        cur.execute("SELECT * FROM disliked_members WHERE MemberId = %s AND LikedMemberId = %s", (member_id, liked_member_id))
+        cur.execute("SELECT id FROM disliked_members WHERE MemberId = %s AND LikedMemberId = %s", (member_id, disliked_member_id))
         check = cur.fetchone()
 
         if not check:
-            cur.execute("INSERT INTO disliked_members(MemberId, LikedMemberId) VALUE(%s, %s)", (member_id, liked_member_id))
+            cur.execute("INSERT INTO disliked_members(MemberId, LikedMemberId) VALUE(%s, %s)", (member_id, disliked_member_id))
             connection.commit()
         connection.close()
 
