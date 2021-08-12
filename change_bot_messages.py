@@ -142,11 +142,71 @@ class SqlRequests:
         as71 = ("wrong_answear", "Нет такого варианта ответа", "There is no such answer option",
                 "Немає такого варіанту відповіді")
 
-        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as71)
+        as72 = ("sympathy",
+                "Есть взаимная симпатия! Начинай общаться 👉",
+                "There is mutual sympathy! Start communicating 👉",
+                "Є взаємна симпатія! Починай спілкуватися 👉")
+
+        as73 = ('you_man_liked_to',
+                "Ты понравился",
+                "I liked you",
+                "Ти сподобався")
+
+        as74 = ('you_girl_liked_to',
+                "Ты понравилась",
+                "I liked you",
+                "Ти сподобалася")
+
+        as75 = ('to_one_girl',
+                "девушке",
+                "girl",
+                "дівчина")
+
+        as76 = ("to_one_guy",
+                "парню",
+                "guy",
+                "хлопець")
+
+        as77 = ("to_many_girls",
+                "девушкам",
+                "girls",
+                "дівчина")
+
+        as78 = ("to_many_guys",
+                "парням",
+                "guys",
+                "хлопець")
+
+        as79 = ('show_or_no',
+                "1. Показать.\n2. Не хочу больше никого смотреть.",
+                "1. Show.\n2. I don't want to watch anyone else.",
+                "1. Показавши.\n2. Не хочу більше нікого дивитися.")
+
+        as80 = ('complaint',
+                'жалоба',
+                'complaint',
+                'скарга')
+
+        as81 = ('someone_liked_your_profile',
+                "Кому-то понравилась твоя анкета (и еще",
+                "Someone liked your profile (and also",
+                "Комусь сподобалася твоя анкета (і ще")
+
+        as82 = ("responce_to_sympathy",
+                "Отлично! Надеюсь хорошо проведете время :) Начинай общатся 👉",
+                "Great! I hope you will have a good time :) Start communicating 👉",
+                "Відмінно! Сподіваюся добре проведете час :) починай спілкуватися 👉")
+
+        as82 = ('complaint_inline_keyboard',
+                "⚠️ Пожаловаться",
+                "⚠️ Complain",
+                "⚠️ Поскаржитися")
+
+        self.cur.execute("INSERT INTO bot_messages VALUES (%s, %s, %s, %s);", as82)
         self.con.commit()
 
     def b(self):
-        #self.cur.execute("DELETE FROM bot_messages WHERE message = %s", ("your_link", ))
+        self.cur.execute("DELETE FROM bot_messages WHERE message = %s", ("someone_liked_your_profile", ))
         a = self.con.commit()
         print(a)
 s = SqlRequests()

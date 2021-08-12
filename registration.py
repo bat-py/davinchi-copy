@@ -18,7 +18,7 @@ class Registration:
 
         elif answear == '🇺🇸 Start':
             self.data.insert_id_lang(chat_id, 'eng')
-            bot_message = self.data.get_self.bot_messages('age', 'eng')
+            bot_message = self.data.get_bot_messages('age', 'eng')
             msg = self.bot.send_message(message.chat.id, bot_message)
             self.bot.register_next_step_handler(msg, self.askAge)
 
@@ -58,8 +58,7 @@ class Registration:
         gender = message.text
 
         if gender == self.data.get_bot_messages('button_man', lang=lang):
-            man = self.data.get_bot_messages('man', lang=lang)
-            self.data.update_member_info(message.chat.id, gender=man)
+            self.data.update_member_info(message.chat.id, gender='man')
             ask_interested = self.data.get_bot_messages('interested', lang=lang)
 
             interested_button_man = self.data.get_bot_messages('interested_button_man', lang=lang)
@@ -69,8 +68,7 @@ class Registration:
             msg = self.bot.send_message(message.chat.id, ask_interested, reply_markup=interested_buttons)
             self.bot.register_next_step_handler(msg, self.askInterested)
         elif gender == self.data.get_bot_messages('button_girl', lang=lang):
-            girl = self.data.get_bot_messages('girl', lang=lang)
-            self.data.update_member_info(message.chat.id, gender=girl)
+            self.data.update_member_info(message.chat.id, gender='girl')
 
             ask_interested = self.data.get_bot_messages('interested', lang=lang)
             interested_button_man = self.data.get_bot_messages('interested_button_man', lang=lang)
@@ -93,21 +91,21 @@ class Registration:
         interested = message.text
 
         if interested  == self.data.get_bot_messages('interested_button_man', lang=lang):
-            self.data.update_member_info(message.chat.id, interested='interested_button_man')
+            self.data.update_member_info(message.chat.id, interested='man')
 
             which_city = self.data.get_bot_messages(message='which_city', lang=lang)
             msg = self.bot.send_message(message.chat.id, which_city)
             self.bot.register_next_step_handler(msg, self.askCity)
 
         elif interested == self.data.get_bot_messages('interested_button_girl', lang=lang):
-            self.data.update_member_info(message.chat.id, interested='interested_button_girl')
+            self.data.update_member_info(message.chat.id, interested='girl')
 
             which_city = self.data.get_bot_messages(message='which_city', lang=lang)
             msg = self.bot.send_message(message.chat.id, which_city)
             self.bot.register_next_step_handler(msg, self.askCity)
 
         elif interested == self.data.get_bot_messages('interested_button_all', lang=lang):
-            self.data.update_member_info(message.chat.id, interested='interested_button_all')
+            self.data.update_member_info(message.chat.id, interested='all')
 
             which_city = self.data.get_bot_messages(message='which_city', lang=lang)
             msg = self.bot.send_message(message.chat.id, which_city)

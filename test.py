@@ -11,10 +11,12 @@ def main():
     @bot.message_handler(commands=['start'])
     def start_command(message):
         ms = 'hello, send photo'
-        bot.send_photo(message.chat.id, 'AgACAgIAAxkBAAITrmEODO7STFiWh7u9km0k-GdqETv_AAKYsjEbXINwSEEu1WhpZkViAQADAgADbQADIAQ', caption='hello')
+        #bot.send_photo(message.chat.id, 'AgACAgIAAxkBAAITrmEODO7STFiWh7u9km0k-GdqETv_AAKYsjEbXINwSEEu1WhpZkViAQADAgADbQADIAQ', caption='hello')
+
+        sympathy = f"Hello {message.from_user.id}"
 
         #msg = bot.send_message(message.chat.id, ms)
-        #bot.register_next_step_handler(msg, photo)
+        bot.send_message(message.chat.id, f'hello <a href="tg://user?id=571777912"> day </a>', parse_mode='html')
 
     def photo(message):
         bot.send_message()

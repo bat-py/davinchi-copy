@@ -18,9 +18,17 @@ class SqlRequests:
         connection = create_connection()
         cur = connection.cursor()
 
+        cur.execute("SELECT id FROM members WHERE id = %s", (id, ))
+        check = cur.fetchone()
+
+        if check:
+            cur.execute("DELETE FROM members WHERE id = %s", (id,))
+
         cur.execute("INSERT INTO members(id, lang) VALUES (%s, %s)", (id, lang))
         connection.commit()
         connection.close()
+
+
 
     def update_member_info(self, id, lang=None, name=None, age=None, gender=None, interested=None, city=None, about=None, avatar=None, avatar_type=None, instagram=None):
         ''' Insert or Update members info '''
@@ -157,35 +165,96 @@ class SqlRequests:
             return responce
 
     def random_profile_select(self, chat_id, interested, city=None):
-        connection = create_connection()
-        cur = connection.cursor()
         while True:
+            connection = create_connection()
+            cur = connection.cursor()
             #self.cur.execute("SELECT * FROM members WHERE interested = %s", (interested, ))
             #profile_list = self.cur.fetchall()
             #if not profile_list:
             try:
-                cur.execute("SELECT * FROM members")
+                cur.execute("SELECT * FROM members;")
                 profile_list = cur.fetchall()
                 connection.close()
                 member = random.choice(profile_list)
                 if member['avatar'] and member['age'] and member['name'] and member['city'] and member['id'] != chat_id:
                     return member
             except:
+                print('blya')
                 continue
 
-    def plus_like(self, id):
+#    def plus_like(self, id):
+#        connection = create_connection()
+#        cur = connection.cursor()
+ #       cur.execute("UPDATE members SET likes = likes+1 WHERE id = %s", (id, ))
+ #       connection.commit()
+ #       connection.close()
+
+#    def plus_dislike(self, id):
+#        connection = create_connection()
+#        cur = connection.cursor()
+#        cur.execute("UPDATE members SET dislikes = dislikes+1 WHERE id = %s", (id, ))
+#        connection.commit()
+#        connection.close()
+
+
+
+    def like(self, member_id, liked_member_id):
         connection = create_connection()
         cur = connection.cursor()
-        cur.execute("UPDATE members SET likes = likes+1 WHERE id = %s", (id, ))
-        connection.commit()
+        # Проверяет, если этот лайк первый, тогда этому человеку отправляется сообщение о том что его лайкнули
+        cur.execute("SELECT id FROM liked_members WHERE MemberId = %s AND LikedMemberId = %s", (member_id, liked_member_id))
+        check = cur.fetchone()
+
+        if not check:
+            cur.execute("INSERT INTO liked_members(MemberId, LikedMemberId) VALUE(%s, %s)", (member_id, liked_member_id))
+            connection.commit()
+
+
+        # Проверяет, если этот лайк первый, тогда этому человеку отправляется сообщение о том что его лайкнули
+        cur.execute("SELECT * FROM liked_members WHERE MemberId = %s", (member_id, ))
+        count_likes = cur.fetchall()
+        if len(count_likes) == 1:
+            return True
+
         connection.close()
 
-    def plus_dislike(self, id):
+    def dislike(self, member_id, liked_member_id):
         connection = create_connection()
         cur = connection.cursor()
-        cur.execute("UPDATE members SET dislikes = dislikes+1 WHERE id = %s", (id, ))
-        connection.commit()
+
+        cur.execute("SELECT * FROM disliked_members WHERE MemberId = %s AND LikedMemberId = %s", (member_id, liked_member_id))
+        check = cur.fetchone()
+
+        if not check:
+            cur.execute("INSERT INTO disliked_members(MemberId, LikedMemberId) VALUE(%s, %s)", (member_id, liked_member_id))
+            connection.commit()
         connection.close()
+
+
+    def likes_count(self, member_id):
+        ''' Количество лайков '''
+        connection = create_connection()
+        cur = connection.cursor()
+
+        cur.execute("SELECT count(id) FROM liked_members WHERE MemberId = %s", (member_id))
+
+        count = cur.fetchone()
+        if count:
+            return count['count(id)']
+        else:
+            return False
+
+    def first_sender(self, answearer_id):
+        connection = create_connection()
+        cur = connection.cursor()
+        cur.execute("SELECT LikedMemberId from liked_members WHERE MemberId = %s", (answearer_id, ))
+        one_of_them = cur.fetchone()
+        one_of_them = one_of_them['LikedMemberId']
+
+        cur.execute("DELETE FROM liked_members WHERE MemberId = %s and LikedMemberId = %s", (answearer_id, one_of_them))
+        connection.commit()
+        return one_of_them
+
 
     def check_exist_id_name_city_avatar(self, id):
         ''' Returns True if member's avatar, age, name, city are exist '''
